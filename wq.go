@@ -1,5 +1,5 @@
 // (c) Henri Binsztok, 2015
-// All Rights Reserved
+// See: LICENSE
 
 package wq
 
