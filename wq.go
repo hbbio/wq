@@ -12,6 +12,7 @@ import (
 )
 
 var waitBeforeStart = true
+var verbose = false
 
 func Min(x, y int) int {
     if x < y {
@@ -37,7 +38,9 @@ type payload func(*sql.DB, string) error
 func worker(db *sql.DB, id int, fn payload, jobs <-chan string, done chan<- bool) {
   var err error
   for job := range jobs {
-    fmt.Println("worker", id, ":", job)
+    if verbose {
+      fmt.Println("worker", id, ":", job)
+    }
     err = fn(db, job)
     if err != nil {
       log.Println(os.Stderr, err)
