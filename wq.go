@@ -102,6 +102,10 @@ func Queue(db *sql.DB, fn payload, nbWorkers int, list []string) (int) {
   }
   close(done) // necessary?
 
-  bar.FinishPrint(fmt.Sprintf("done: %d/%d", correct, nbJobs))
+  if correct < nbJobs {
+    bar.FinishPrint(fmt.Sprintf("⚠ some jobs had errors: %d/%d", correct, nbJobs))
+  } else {
+    bar.FinishPrint("✓ ok")
+  }
   return correct
 }
