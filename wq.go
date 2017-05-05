@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 	"database/sql"
+  "gopkg.in/cheggaaa/pb.v1"
 )
 
 var waitBeforeStart = true
@@ -58,6 +59,8 @@ func Queue(db *sql.DB, fn payload, nbWorkers int, list []string) (int) {
   }
   printJob(nbJobs)
 
+  bar := pb.StartNew(nbJobs)
+
   // compute pool size
   poolSize := Min(nbJobs, nbWorkers)
 
@@ -82,6 +85,7 @@ func Queue(db *sql.DB, fn payload, nbWorkers int, list []string) (int) {
   // 3. iterate, feed pool when a job is finished
   for i < nbJobs {
     result = <- done // wait for one job to finish
+    bar.Increment()
     if result { correct++ }
     jobs <- list[i] // launch a new job
     i++
@@ -92,11 +96,12 @@ func Queue(db *sql.DB, fn payload, nbWorkers int, list []string) (int) {
   i = 0
   for i < poolSize {
     result = <- done
+    bar.Increment()
     if result { correct++ }
     i++
   }
   close(done) // necessary?
 
-  fmt.Println("done:", correct, "/", nbJobs, "successful")
+  bar.FinishPrint(fmt.Sprintf("done: %d/%d", correct, nbJobs))
   return correct
 }
