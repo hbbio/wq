@@ -15,6 +15,10 @@ import (
 var waitBeforeStart = true
 var verbose = false
 
+func SetWait(b bool) {
+  waitBeforeStart = b
+}
+
 func Min(x, y int) int {
     if x < y {
         return x
