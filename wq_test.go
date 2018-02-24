@@ -4,8 +4,8 @@
 package wq
 
 import (
-	"testing"
 	"database/sql"
+	"testing"
 )
 
 var dummy_db *sql.DB
@@ -23,21 +23,21 @@ func dummy_fn(db *sql.DB, s string) error {
 }
 
 type testT struct {
-	fn payload
+	fn        payload
 	nbWorkers int
-	list []string
+	list      []string
 }
 
-var tests = []testT {
-	{ dummy_fn, 1, []string{} },
-	{ dummy_fn, 1, []string{"foo"} },
-	{ dummy_fn, 1, []string{"foo", "bar"} },
-	{ dummy_fn, 3, []string{} },
-	{ dummy_fn, 3, []string{"foo"} },
-	{ dummy_fn, 3, []string{"foo", "bar"} },
-	{ dummy_fn, 3, []string{"foo", "bar", "foo", "bar"} },
-	{ dummy_fn, -1, []string{} },
-	{ dummy_fn, -1, []string{"foo"} },
+var tests = []testT{
+	{dummy_fn, 1, []string{}},
+	{dummy_fn, 1, []string{"foo"}},
+	{dummy_fn, 1, []string{"foo", "bar"}},
+	{dummy_fn, 3, []string{}},
+	{dummy_fn, 3, []string{"foo"}},
+	{dummy_fn, 3, []string{"foo", "bar"}},
+	{dummy_fn, 3, []string{"foo", "bar", "foo", "bar"}},
+	{dummy_fn, -1, []string{}},
+	{dummy_fn, -1, []string{"foo"}},
 }
 
 func TestQueue(t *testing.T) {
