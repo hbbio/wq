@@ -6,19 +6,23 @@ package wq
 import (
 	"database/sql"
 	"fmt"
-	"gopkg.in/cheggaaa/pb.v1"
 	"log"
 	"os"
 	"time"
+
+	"gopkg.in/cheggaaa/pb.v1"
 )
 
 var waitBeforeStart = true
 var verbose = false
+var l = log.New(os.Stderr, "", 0)
 
+// SetWait toggles a wait at program start
 func SetWait(b bool) {
 	waitBeforeStart = b
 }
 
+// Min computes the minimum of 2 integers
 func Min(x, y int) int {
 	if x < y {
 		return x
@@ -38,7 +42,7 @@ func printJob(nb int) {
 		}
 		fmt.Print(".")
 	}
-	fmt.Println("")
+	fmt.Print("\n")
 }
 
 // payload do not have results
@@ -52,12 +56,13 @@ func worker(db *sql.DB, id int, fn payload, jobs <-chan string, done chan<- bool
 		}
 		err = fn(db, job)
 		if err != nil {
-			log.Println(os.Stderr, err)
+			l.Println(err)
 		}
 		done <- err == nil
 	}
 }
 
+// Queue runs a queue of work, using nbWorkers workers
 func Queue(db *sql.DB, fn payload, nbWorkers int, list []string) int {
 	// compute and check number of jobs > 0
 	nbJobs := len(list)

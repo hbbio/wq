@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var dummy_db *sql.DB
+var dummyDb *sql.DB
 
 func TestMin(t *testing.T) {
 	var x int
@@ -18,7 +18,7 @@ func TestMin(t *testing.T) {
 	}
 }
 
-func dummy_fn(db *sql.DB, s string) error {
+func dummyFn(db *sql.DB, s string) error {
 	return nil
 }
 
@@ -29,21 +29,21 @@ type testT struct {
 }
 
 var tests = []testT{
-	{dummy_fn, 1, []string{}},
-	{dummy_fn, 1, []string{"foo"}},
-	{dummy_fn, 1, []string{"foo", "bar"}},
-	{dummy_fn, 3, []string{}},
-	{dummy_fn, 3, []string{"foo"}},
-	{dummy_fn, 3, []string{"foo", "bar"}},
-	{dummy_fn, 3, []string{"foo", "bar", "foo", "bar"}},
-	{dummy_fn, -1, []string{}},
-	{dummy_fn, -1, []string{"foo"}},
+	{dummyFn, 1, []string{}},
+	{dummyFn, 1, []string{"foo"}},
+	{dummyFn, 1, []string{"foo", "bar"}},
+	{dummyFn, 3, []string{}},
+	{dummyFn, 3, []string{"foo"}},
+	{dummyFn, 3, []string{"foo", "bar"}},
+	{dummyFn, 3, []string{"foo", "bar", "foo", "bar"}},
+	{dummyFn, -1, []string{}},
+	{dummyFn, -1, []string{"foo"}},
 }
 
 func TestQueue(t *testing.T) {
 	waitBeforeStart = false
 	for i, v := range tests {
-		res := Queue(dummy_db, v.fn, v.nbWorkers, v.list)
+		res := Queue(dummyDb, v.fn, v.nbWorkers, v.list)
 		if res != len(v.list) && !(v.nbWorkers <= 0 && res == 0) {
 			t.Error("queue", i)
 		}
