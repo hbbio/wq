@@ -1,4 +1,8 @@
-# wq, A basic Worker Queue in Go
+# wq, a basic Worker Queue in Go
+
+[![GoDoc](https://godoc.org/github.com/hbbio/wq?status.svg)](https://godoc.org/github.com/hbbio/wq)
+[![Build
+Status](https://travis-ci.org/hbbio/wq.svg?branch=master)](https://travis-ci.org/hbbio/wq)
 
 # Example
 
