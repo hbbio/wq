@@ -1,29 +1,15 @@
-// (c) Henri Binsztok, 2015
-// See: LICENSE
-
 package wq
 
 import (
-	"database/sql"
 	"testing"
 )
 
-var dummyDb *sql.DB
-
-func TestMin(t *testing.T) {
-	var x int
-	x = Min(-1, 1)
-	if x != -1 {
-		t.Error("min1")
-	}
-}
-
-func dummyFn(db *sql.DB, s string) error {
+func dummyFn(s string) error {
 	return nil
 }
 
 type testT struct {
-	fn        payload
+	fn        Payload
 	nbWorkers int
 	list      []string
 }
@@ -41,11 +27,20 @@ var tests = []testT{
 }
 
 func TestQueue(t *testing.T) {
-	waitBeforeStart = false
 	for i, v := range tests {
-		res := Queue(dummyDb, v.fn, v.nbWorkers, v.list)
-		if res != len(v.list) && !(v.nbWorkers <= 0 && res == 0) {
-			t.Error("queue", i)
+		res, err := Queue(v.nbWorkers, v.fn, v.list)
+		if err == ErrNoJob {
+			if !(v.nbWorkers <= 0 || len(v.list) == 0) {
+				t.Log(v)
+				t.Error("should not fail")
+			}
+		} else if err != nil {
+			t.Error(err)
+		}
+		if err == nil {
+			if res != len(v.list) {
+				t.Error("queue", i)
+			}
 		}
 	}
 }
